@@ -32,6 +32,7 @@ import PatientImmunizations from "@/pages/PatientSummary/PatientTabs/PatientImmu
 import PatientEncounters from "@/pages/PatientSummary/PatientTabs/PatientEncounters.tsx";
 import PatientObservations from "@/pages/PatientSummary/PatientTabs/PatientObservations.tsx";
 import PatientMedicationStatements from "@/pages/PatientSummary/PatientTabs/PatientMedicationStatements.tsx";
+import PatientDocumentReferences from "@/pages/PatientSummary/PatientTabs/PatientDocumentReferences.tsx";
 
 interface PatientDetailsProps {
   patient: Patient | null;
@@ -72,6 +73,9 @@ function PatientDetails(props: PatientDetailsProps) {
             <TabsTrigger value="observations" disabled={!patient}>
               Observations
             </TabsTrigger>
+            <TabsTrigger value="documentReferences" disabled={!patient}>
+              Document References
+            </TabsTrigger>
           </TabsList>
         </div>
         {patient && patient.id ? (
@@ -102,6 +106,9 @@ function PatientDetails(props: PatientDetailsProps) {
             </TabsContent>
             <TabsContent value="observations">
               <PatientObservations patientId={patient.id} />
+            </TabsContent>
+            <TabsContent value="documentReferences">
+              <PatientDocumentReferences patientId={patient.id} />
             </TabsContent>
           </>
         ) : (

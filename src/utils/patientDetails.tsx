@@ -20,6 +20,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge.tsx";
 import { Observation, ObservationComponent, Period } from "fhir/r4";
 import { MedicationLabel } from "@/utils/medicationText.ts";
+import AttachmentLink from "@/components/AttachmentLink.tsx";
 
 // Encounter functions and types
 export interface EncounterTableData {
@@ -604,6 +605,125 @@ export function createImmunizationTableColumns(): ColumnDef<ImmunizationTableDat
         return row.original.occurrenceDate
           ? row.original.occurrenceDate.format("DD/MM/YYYY")
           : "-";
+      },
+    },
+  ];
+}
+
+// DocumentReferences functions and types
+export interface DocumentReferenceAttachment {
+  url: string;
+  title: string;
+  contentType: string;
+}
+
+export interface DocumentReferenceTableData {
+  id: string;
+  document: string;
+  description: string;
+  status: string;
+  category: string;
+  date: Dayjs | null;
+  attachments: DocumentReferenceAttachment[];
+}
+
+export function createDocumentReferenceTableColumns(): ColumnDef<DocumentReferenceTableData>[] {
+  return [
+    {
+      accessorKey: "document",
+      header: "Document",
+      cell: ({ row }) => (
+        <div className="flex max-w-64">
+          <div className="space-y-1">
+            <div className="font-medium">{row.getValue("document") ?? "-"}</div>
+            {row.original.description ? (
+              <div className="text-xs text-muted-foreground">
+                {row.original.description}
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
+            {row.getValue("id") ?? "-"}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) =>
+        row.getValue("status") ? (
+          <Badge variant="outline">{row.getValue("status")}</Badge>
+        ) : (
+          "-"
+        ),
+    },
+    {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) =>
+        row.getValue("category") ? row.getValue("category") : "-",
+    },
+    {
+      accessorKey: "date",
+      header: "Date",
+      sortingFn: (a, b) => {
+        if (a.original.date === null || b.original.date === null) {
+          return 0;
+        }
+
+        return a.original.date.diff(b.original.date);
+      },
+      cell: ({ row }) => {
+        return row.original.date
+          ? row.original.date.format("DD/MM/YYYY")
+          : "-";
+      },
+    },
+    {
+      accessorKey: "attachments",
+      header: "Attachment(s)",
+      enableSorting: false,
+      cell: ({ row }) => {
+        const attachments = row.original.attachments;
+        if (attachments.length === 0) {
+          return "-";
+        }
+
+        return (
+          <div className="flex flex-col gap-2 min-w-64">
+            {attachments.map((attachment, index) => (
+              <div key={index} className="space-y-1">
+                {attachment.title ? (
+                  <div className="font-medium">{attachment.title}</div>
+                ) : null}
+                <div className="text-xs">
+                  {attachment.url ? (
+                    <AttachmentLink
+                      url={attachment.url}
+                      contentType={attachment.contentType || undefined}
+                    />
+                  ) : (
+                    <span className="text-muted-foreground">No URL</span>
+                  )}
+                </div>
+                {attachment.contentType ? (
+                  <div className="text-xs text-muted-foreground">
+                    {attachment.contentType}
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        );
       },
     },
   ];
