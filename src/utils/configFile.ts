@@ -178,7 +178,9 @@ export function encodeAdditionalContext(
 }
 
 export async function loadConfigFle(): Promise<ConfigFile> {
-  const response = await fetch("/config.json");
+  // Always revalidate: config.json is replaced at deploy time and served without
+  // cache headers, so the browser would otherwise keep using a stale copy
+  const response = await fetch("/config.json", { cache: "no-cache" });
 
   if (!response.ok) {
     throw new Error(
