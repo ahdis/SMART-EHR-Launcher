@@ -27,6 +27,7 @@ import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { X } from "lucide-react";
 import useConfig from "@/hooks/useConfig.ts";
+import { encodeAdditionalContext } from "@/utils/configFile.ts";
 
 function AppLaunchAppsSettings() {
   const { query, setQuery } = useLauncherQuery();
@@ -49,6 +50,7 @@ function AppLaunchAppsSettings() {
       scope: appConfig.scope,
       redirect_uris: appConfig.redirectUris,
       is_embedded_view: appConfig.isEmbeddedView,
+      additional_context: encodeAdditionalContext(appConfig.additionalContext),
     });
   }
 

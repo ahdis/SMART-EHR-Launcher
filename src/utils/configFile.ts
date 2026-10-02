@@ -15,6 +15,11 @@
  * limitations under the License.
  */
 
+export interface AdditionalContextEntry {
+  key: string;
+  value: string;
+}
+
 export interface AppConfig {
   appName: string;
   launchUrl: string;
@@ -22,6 +27,9 @@ export interface AppConfig {
   scope: string;
   redirectUris: string;
   isEmbeddedView: boolean;
+
+  // (Optional) Key/value pairs preset as "Additional Context" in "App Launch" settings
+  additionalContext?: AdditionalContextEntry[];
 }
 
 export interface ConfigFile {
@@ -146,8 +154,27 @@ export function appConfigIsValid(app: any): app is AppConfig {
     typeof app.clientId === "string" &&
     typeof app.scope === "string" &&
     typeof app.redirectUris === "string" &&
-    typeof app.isEmbeddedView === "boolean"
+    typeof app.isEmbeddedView === "boolean" &&
+    (app.additionalContext === undefined ||
+      (Array.isArray(app.additionalContext) &&
+        app.additionalContext.every(
+          (entry: any) =>
+            entry &&
+            typeof entry.key === "string" &&
+            typeof entry.value === "string"
+        )))
   );
+}
+
+/**
+ * Encode an app's preset additional context the way it is stored in the launch parameters (JSON string, empty if none)
+ */
+export function encodeAdditionalContext(
+  additionalContext: AdditionalContextEntry[] | undefined
+): string {
+  return additionalContext && additionalContext.length > 0
+    ? JSON.stringify(additionalContext)
+    : "";
 }
 
 export async function loadConfigFle(): Promise<ConfigFile> {

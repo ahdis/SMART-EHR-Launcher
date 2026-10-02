@@ -18,6 +18,7 @@
 import useLauncherQuery from "./useLauncherQuery.ts";
 import { useEffect } from "react";
 import useConfig from "@/hooks/useConfig.ts";
+import { encodeAdditionalContext } from "@/utils/configFile.ts";
 
 function useLoadResources() {
   const { query, launch, setQuery } = useLauncherQuery();
@@ -37,6 +38,9 @@ function useLoadResources() {
         fhir_context: launch.fhir_context || "",
         source_fhir_server: launch.source_fhir_server || fhirServerUrl,
         is_embedded_view: launch.is_embedded_view || false,
+        additional_context:
+          launch.additional_context ||
+          encodeAdditionalContext(defaultApp.additionalContext),
       });
     },
     // Only run this once on load

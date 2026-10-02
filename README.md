@@ -64,6 +64,8 @@ export interface ConfigFile {
 
 See [this section](#smart-app-launchs-launch-parameter-config) for `launchParamConfigType` details.
 
+An entry of `appList` (and `defaultApp`) can carry an optional `additionalContext`, a list of `{ "key": string, "value": string }` pairs. They are preset as "Additional Context" in the "App Launch" settings when the app is selected, and are returned in the token response.
+
 #### Mandatory configs:
 ```
 fhirServerUrl: <FHIR server for Patient record data>

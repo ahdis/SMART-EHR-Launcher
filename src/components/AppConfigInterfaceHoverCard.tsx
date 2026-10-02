@@ -64,6 +64,12 @@ function AppConfigInterfaceHoverCard(props: AppConfigInterfaceHoverCardProps) {
                 <span className="text-blue-600">isEmbeddedView</span>:{" "}
                 <span className="text-green-600">boolean</span>
               </div>
+              <div>
+                <span className="text-blue-600">additionalContext?</span>:{" "}
+                <span className="text-green-600">
+                  {"{ key: string; value: string }[]"}
+                </span>
+              </div>
             </div>
             <div className="text-muted-foreground">{"}"}</div>
           </div>
