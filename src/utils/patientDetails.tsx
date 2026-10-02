@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { Observation, ObservationComponent, Period } from "fhir/r4";
 import { MedicationLabel } from "@/utils/medicationText.ts";
 import AttachmentLink from "@/components/AttachmentLink.tsx";
+import DocumentReferenceDeleteButton from "@/components/DocumentReferenceDeleteButton.tsx";
 
 // Encounter functions and types
 export interface EncounterTableData {
@@ -725,6 +726,19 @@ export function createDocumentReferenceTableColumns(): ColumnDef<DocumentReferen
           </div>
         );
       },
+    },
+    {
+      id: "actions",
+      header: "",
+      enableSorting: false,
+      cell: ({ row }) => (
+        <DocumentReferenceDeleteButton
+          documentReferenceId={row.original.id}
+          attachmentUrls={row.original.attachments.map(
+            (attachment) => attachment.url
+          )}
+        />
+      ),
     },
   ];
 }

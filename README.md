@@ -22,7 +22,7 @@ Contact **Heath Frankel** <heath@intervise.com.au> to get test user credentials 
 ## Features
 
 #### General features:
-- Provides concise Patient health information with referenced Encounters, Conditions, MedicationRequests, AllergyIntolerances, Procedures, Immunisations, Observations, DocumentReferences (with links to open their attachments, e.g. a Binary or Bundle)
+- Provides concise Patient health information with referenced Encounters, Conditions, MedicationRequests, AllergyIntolerances, Procedures, Immunisations, Observations, DocumentReferences (with links to open their attachments, e.g. a Binary or Bundle, and a button to delete a DocumentReference together with the attachments stored on the FHIR server)
 - Easy switching of Patient, user (Practitioner) and Encounter launch context
 - Easy switching of pre-configured SMART apps or manual config of a new SMART app (requires app registration with underlying server)
 - Supports embedded SMART app view within EHR

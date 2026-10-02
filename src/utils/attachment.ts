@@ -53,3 +53,24 @@ export function getDisplayableBlob(blob: Blob): Blob {
 
   return blob;
 }
+
+/**
+ * Get the "ResourceType/id" path of an Attachment.url that refers to a resource on the FHIR server.
+ * Returns null for anything else (e.g. a URL on another server), so that only the server's own resources are deleted.
+ */
+export function getAttachmentResourcePath(
+  url: string,
+  fhirServerUrl: string
+): string | null {
+  const resolvedUrl = resolveAttachmentUrl(url, fhirServerUrl);
+  const base = fhirServerUrl.replace(/\/+$/, "") + "/";
+  if (!fhirServerUrl || !resolvedUrl || !resolvedUrl.startsWith(base)) {
+    return null;
+  }
+
+  const match = resolvedUrl
+    .slice(base.length)
+    .match(/^([A-Z][A-Za-z]+)\/([A-Za-z0-9\-.]{1,64})(\/_history\/[^/?#]+)?$/);
+
+  return match ? `${match[1]}/${match[2]}` : null;
+}
